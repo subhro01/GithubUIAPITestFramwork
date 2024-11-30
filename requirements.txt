@@ -1,4 +1,5 @@
 selenium
 pytest
-pytest-html
+pytest-selenium
 requests
+PyYAML
