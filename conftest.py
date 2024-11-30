@@ -1,8 +1,9 @@
 import os
 import pytest
 from datetime import datetime
-from utils.browser_setup import setup_browser
+from utils.browser_setup import get_driver
 from utils.api_helpers import APIHelper
+from utils.config_loader import load_config
 
 # Generate results folder with timestamp
 @pytest.hookimpl(tryfirst=True)
@@ -17,7 +18,12 @@ def pytest_configure(config):
 # Browser fixture
 @pytest.fixture(scope="function")
 def driver():
-    driver = setup_browser()
+    # Load WebDriver configuration from config.yaml
+    config = load_config()
+    webdriver_config = config.get("webdriver", {})
+
+    # Use the get_driver function to initialize the driver based on config
+    driver = get_driver(webdriver_config)
     yield driver
     driver.quit()
 
