@@ -1,13 +1,12 @@
 import pytest
 from pages.login_page import LoginPage
-from pages.issue_page import IssuePage
 from utils.logger import setup_logger
 from utils.report_helper import generate_html_report
 from utils.browser_setup import get_driver
 from utils.config_loader import load_config
 
 
-class TestCreateIssue:
+class TestLogin:
     @pytest.fixture(autouse=True)
     def setup_and_teardown(self):
         """Setup and teardown for each test."""
@@ -29,35 +28,41 @@ class TestCreateIssue:
         report_path = generate_html_report()
         self.logger.info(f"HTML Test Report generated at: {report_path}")
 
-    def test_create_issue(self):
-        """Test case for creating an issue through the GitHub UI."""
-        self.logger.info("Starting the test: Create GitHub Issue via UI")
+    def test_login_valid_credentials(self):
+        """Test case for logging in with valid credentials."""
+        self.logger.info("Starting the test: Login with valid credentials")
 
         try:
             github_config = self.config["github"]
 
             # Navigate to GitHub Login Page
             self.logger.info("Navigating to GitHub login page")
-            # Log in first (using LoginPage)
-            self.logger.info("Attempting to log in")
+
+            # Attempt to log in with valid credentials
             login_page = LoginPage(self.driver)
             login_page.load()
             login_page.login(github_config["username"], github_config["password"])
-            assert login_page.login_successful(), "Login failed"
-            self.logger.info("Login successful")
+            assert login_page.login_successful(), "Login with valid credentials failed"
+            self.logger.info("Login with valid credentials successful")
 
-            # Navigate to the Issue Page
-            self.logger.info("Navigating to issue creation page")
-            issue_page = IssuePage(self.driver, github_config["owner"], github_config["repository_name"])
-            issue_page.load()
+        except Exception as e:
+            self.logger.error(f"Test failed with error: {e}")
+            raise e
 
-            # Create an issue
-            self.logger.info("Attempting to create an issue")
-            issue_title = "Test Issue"
-            issue_description = "This issue was created via the UI"
-            issue_page.create_issue(issue_title, issue_description)
-            assert issue_page.is_issue_created(issue_title), "Issue creation failed"
-            self.logger.info("Issue created successfully")
+    def test_login_invalid_credentials(self):
+        """Test case for logging in with invalid credentials."""
+        self.logger.info("Starting the test: Login with invalid credentials")
+
+        try:
+            # Navigate to GitHub Login Page
+            self.logger.info("Navigating to GitHub login page")
+
+            # Attempt to log in with invalid credentials
+            login_page = LoginPage(self.driver)
+            login_page.load()
+            login_page.login("invalid_username", "invalid_password")
+            assert login_page.is_error_message_displayed(), "Error message was not displayed for invalid credentials"
+            self.logger.info("Error message displayed successfully for invalid credentials")
 
         except Exception as e:
             self.logger.error(f"Test failed with error: {e}")

@@ -35,7 +35,6 @@ class TestCreateRepository:
         try:
             # Navigate to GitHub Login Page
             self.logger.info("Navigating to GitHub login page")
-            self.driver.get("https://github.com/login")
 
             # Log in first (using LoginPage)
             self.logger.info("Attempting to log in")
