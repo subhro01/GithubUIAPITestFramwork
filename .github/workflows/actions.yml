@@ -1,0 +1,50 @@
+name: Run Github UI And API Test
+
+# Trigger this workflow on push or pull request
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Step 4: Run the tests
+      - name: Run Tests
+        run: |
+          pytest --maxfail=1 --disable-warnings -q
+
+      # Step 5: Generate an HTML report
+      - name: Generate HTML report
+        if: success()
+        run: |
+          pytest --maxfail=1 --disable-warnings --html=report.html
+
+      # Step 6: Upload the report as artifact
+      - name: Upload Test Report as artifact
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-report
+          path: report.html
