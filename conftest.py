@@ -25,9 +25,3 @@ def driver():
     driver = get_driver(webdriver_config)
     yield driver
     driver.quit()
-
-# API fixture
-@pytest.fixture(scope="module")
-def api():
-    token = os.getenv("GITHUB_TOKEN", "<YOUR_PERSONAL_ACCESS_TOKEN>")
-    return APIHelper(token)
