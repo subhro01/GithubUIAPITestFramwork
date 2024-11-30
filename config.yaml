@@ -6,6 +6,7 @@ github:
   repository_name: "test-repo"      # Replace with the name of the repository to create
   repository_description: "This is a test repository"  # Description of the test repo
   repository_visibility: true       # Set to true for private repo, false for public repo
+  api_token: "your_personal_access_token"
 
 # WebDriver Configuration
 webdriver:
