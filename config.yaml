@@ -1,7 +1,7 @@
 # GitHub Configuration
 github:
-  username: "subhro01"        # Replace with your GitHub username
-  password: "Subhro@81094"        # Replace with your GitHub password
+  username: "xxxx"        # Replace with your GitHub username
+  password: "xxxx"        # Replace with your GitHub password
   owner: "valid_owner"              # Replace with the owner of the repository
   repository_name: "test-repo"      # Replace with the name of the repository to create
   repository_description: "This is a test repository"  # Description of the test repo
